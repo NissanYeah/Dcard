@@ -6,11 +6,11 @@ const connectionRecord = new Schema({
     type: String,              
     required: true          
   }, 
-  rate_limit: { //日期
+  rate_limit: { //剩餘的請求數量
     type: Number,              
     required: true          
   },
-  reset_time: { //重設時間
+  reset_time: { //歸零的時間
     type: Date,              
     required: true          
   },
