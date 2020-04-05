@@ -13,9 +13,8 @@ const connectionMonitor = function(req, res, next){
     const recordExisted = result.length
     const thisTime = new Date()
     const resetTime = new Date(); resetTime.setHours(resetTime.getHours() + 1);
-    // const resetTime = new Date(); resetTime.setMinutes(resetTime.getMinutes() + 1); 測試用
 
-    if(!recordExisted) { // 如果沒紀錄，增加紀錄
+    if(!recordExisted) { // 1. 允許連線&增加紀錄 (如果紀錄不存在)
 
       const newRecord = new connectionRecord({
         ip: ip,
@@ -33,16 +32,18 @@ const connectionMonitor = function(req, res, next){
       const rateLimitExceeded = result[0].rate_limit <= 0 ? true : false
       const resetTimeLimitExceeded = result[0].reset_time - thisTime < 0 ? true : false 
       
-      if(!rateLimitExceeded && !resetTimeLimitExceeded)  { //允許連線：次數沒超過 && 時間未過期 
+      if(!rateLimitExceeded && !resetTimeLimitExceeded)  { //2. 允許連線 (如果次數沒超過 && 時間未過期 )
         result[0].rate_limit = result[0].rate_limit -1 
         result[0].save(err=>{
           res.header("X-RateLimit-Remaining", result[0].rate_limit)
           res.header("X-RateLimit-Reset", result[0].reset_time)
           next();
         })
-      } else if(rateLimitExceeded && !resetTimeLimitExceeded) {  // Too Many Requests：次數超過 && 時間未過期 
+      } else if(rateLimitExceeded && !resetTimeLimitExceeded) {  // 3. 拒絕連線（如果次數超過 && 時間未過期）
+
         res.status(429).send('Too Many Requests');
-      } else if(resetTimeLimitExceeded) {  ///允許連線：時間過期 
+
+      } else if(resetTimeLimitExceeded) {  ///4. 允許連線＆重設可請求數量（如果次數超過 && 時間過期）
         result[0].rate_limit = maxRequestTimesAllowed
         result[0].reset_time = resetTime
         result[0].save(err=>{

@@ -2,10 +2,18 @@
 
 # Dcard
 
-Run with
+測試用網站： http://ec2-3-17-173-21.us-east-2.compute.amazonaws.com:4000/
 
-- node 10.15.0
-- npm 6.4.1
+- Backend：Express
+- Database: MongoDB
+- Server: AWS
+
+## Intro
+
+- `./app.js`: 主程式
+- `./middleware/connectionMonitor`：監測API連線的middleware
+- `./models/connectionRecord`：API的儲存模型
+
 
 ## Usage
 
