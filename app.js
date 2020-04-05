@@ -1,39 +1,29 @@
 const express = require('express');
-
 const app = express()
-// const mongoose = require('mongoose')  
+const mongoose = require('mongoose')  
+const connectionMonitor = require('./middleware/connectionMonitor')  
  
+mongoose.connect('mongodb://localhost/Dcard',{ useNewUrlParser: true,useUnifiedTopology: true })
 
+const db = mongoose.connection
 
-// mongoose.connect('mongodb://localhost/diagnosis',{ useNewUrlParser: true,useUnifiedTopology: true })
+db.on('error', ()=>{
+  console.log('mongodb error!')
+})
 
-// const db = mongoose.connection
-
-// app.use(bodyParser.json());
-
-// db.on('error', ()=>{
-//   console.log('mongodb error!')
-// })
-
-// db.once('open', () => {
-//   console.log('mongodb connected!')
-// })
-
-// app.use(session({ // 設定session
-//   secret: 'your secret key',
-//   resave: false,
-//   saveUninitialized: true,
-// }))
-
-
-
-//Router
-app.get('/', (req,res)=>{
-  var ip = req.header('x-forwarded-for') || req.connection.remoteAddress
-  res.send(ip);
+db.once('open', () => {
+  console.log('mongodb connected!')
 })
 
 
-app.listen('3000', () => {
+app.use(connectionMonitor) //監測IP連線
+
+
+app.get('/', (req,res)=>{
+  res.send('Connect Successful!')
+})
+
+
+app.listen('4000', () => {
   console.log(`Backend is running on http://localhost:4000`)
 })
