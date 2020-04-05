@@ -9,7 +9,7 @@ const connectionMonitor = function(req, res, next){
   }
 
   connectionRecord.find( { ip: ip },(err, result)=>{ // 尋找IP紀錄
-    const maxRequestTimesAllowed = 5  
+    const maxRequestTimesAllowed = 1000
     const recordExisted = result.length
     const thisTime = new Date()
     const resetTime = new Date(); resetTime.setHours(resetTime.getHours() + 1);
