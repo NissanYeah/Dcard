@@ -1,0 +1,23 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "express": "^4.17.1",
+    "mongoose": "^5.9.2"
+  },
+  "devDependencies": {
+    "kill-port": "^1.6.0"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "serve": "nodemon app.js",
+    "init": "cd models/seeds/ && node all.js",
+    "drop": "cd models/seeds/ && node dropDatabase.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
